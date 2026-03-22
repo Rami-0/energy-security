@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Надежность НПЗ России: Анализ и Рекомендации</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #020617;
+            color: #f1f5f9;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            margin: auto;
+            height: 380px;
+        }
+
+        .formula-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-left: 4px solid #38bdf8;
+        }
+
+        .step-node {
+            border: 1px solid #334155;
+            background: #0f172a;
+            transition: all 0.3s ease;
+        }
+
+        .step-node:hover {
+            border-color: #38bdf8;
+            transform: translateY(-2px);
+        }
+
+        .loading-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+
+        .math-var {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+
+        .math-sub {
+            font-family: 'Inter', sans-serif;
+            font-style: normal;
+            font-size: 0.6em;
+            vertical-align: sub;
+        }
+
+        .calc-step {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1.25rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .calc-step .step-num {
+            color: #38bdf8;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .calc-step .step-result {
+            color: #f1f5f9;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <nav class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-lg border-b border-slate-800 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="bg-sky-500 p-1.5 rounded-lg text-slate-950 font-bold">РФ</div>
+                <span class="text-xl font-bold tracking-tight">ЭнергоБезопасность НПЗ</span>
+            </div>
+            <div class="hidden md:block text-xs text-slate-400 uppercase tracking-widest">
+                Соответствие ГОСТ 32144-2013
+            </div>
+        </div>
+    </nav>
+
+    <header class="max-w-6xl mx-auto px-6 pt-16 pb-12 text-center">
+        <h1 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
+            Оптимизация надежности <span class="text-sky-400">НПЗ</span> в условиях нестабильности внешних сетей
+        </h1>
+        <p class="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto">
+            Для российских НПЗ проблема провалов напряжения стоит особенно остро из-за износа распределительных сетей
+            110-220 кВ и высокой доли асинхронной нагрузки (до 85-90%).
+        </p>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 space-y-20 pb-24">
+
+        <!-- SECTION 1: CALCULATIONS & MATH MODEL -->
+        <section>
+            <div class="flex items-center gap-4 mb-8">
+                <div class="h-10 w-1 bg-sky-500"></div>
+                <h2 class="text-3xl font-bold">Расчет технико-экономического ущерба</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <div class="formula-card p-8 rounded-3xl shadow-2xl border border-slate-800">
+                    <h3 class="text-sky-400 font-bold mb-4 uppercase text-sm tracking-widest">Математическая модель (по
+                        Задковой Е.А.)</h3>
+
+                    <div class="text-3xl md:text-4xl font-bold mb-6 text-slate-100 tracking-wider">
+                        <span class="math-var text-sky-400">Y</span><span class="math-sub text-sky-400">&Sigma;</span> =
+                        <span class="math-var">Y</span><span class="math-sub">пр</span> +
+                        <span class="math-var">Y</span><span class="math-sub">пуск</span> +
+                        <span class="math-var">Y</span><span class="math-sub">обор</span> +
+                        <span class="math-var">Y</span><span class="math-sub">экол</span>
+                    </div>
+
+                    <ul class="space-y-4 text-sm text-slate-300">
+                        <li class="flex justify-between border-b border-slate-800 pb-2">
+                            <span><span class="math-var">Y</span><span class="math-sub">пр</span> — Упущенная выгода
+                                (недовыпуск)</span>
+                            <span class="text-sky-400 font-bold">~ 40-50%</span>
+                        </li>
+                        <li class="flex justify-between border-b border-slate-800 pb-2">
+                            <span><span class="math-var">Y</span><span class="math-sub">пуск</span> — Затраты на пуск и
+                                тех. сырье</span>
+                            <span class="text-sky-400 font-bold">~ 20-30%</span>
+                        </li>
+                        <li class="flex justify-between border-b border-slate-800 pb-2">
+                            <span><span class="math-var">Y</span><span class="math-sub">обор</span> — Износ и
+                                повреждение оборудования</span>
+                            <span class="text-sky-400 font-bold">~ 15%</span>
+                        </li>
+                        <li class="flex justify-between border-b border-slate-800 pb-2">
+                            <span><span class="math-var">Y</span><span class="math-sub">экол</span> — Штрафы за сброс на
+                                факел</span>
+                            <span class="text-sky-400 font-bold">~ 10%</span>
+                        </li>
+                    </ul>
+                    <p class="mt-6 text-xs text-slate-500 leading-relaxed italic">
+                        *Для НПЗ мощностью 10 млн т/год одна остановка ГФУ (газофракционирующей установки) может стоить
+                        от 15 до 45 млн рублей в ценах 2024 года.
+                    </p>
+                </div>
+
+                <div class="bg-slate-900/50 p-6 rounded-3xl border border-slate-800 flex flex-col h-full">
+                    <h3 class="text-lg font-bold mb-6">Статистика инцидентов (РФ регионы)</h3>
+                    <div class="chart-container flex-grow">
+                        <canvas id="incidentsChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-[11px] text-slate-500 text-right border-t border-slate-800 pt-2">
+                        *Источник: Усредненные данные по предприятиям непрерывного цикла Приволжского ФО<br>
+                        (на базе исследований Задковой Е.А., Арцишевского Я.Л., 2008-2010 гг.)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: SIMULATOR -->
+        <section
+            class="bg-sky-950/20 rounded-[3rem] p-10 border border-sky-500/20 shadow-[0_0_50px_-12px_rgba(56,189,248,0.25)]">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="text-3xl">⚡</span>
+                    <h2 class="text-3xl font-bold">Расчет устойчивости</h2>
+                </div>
+                <p class="text-slate-400 mb-10">
+                    Система выполнит точный математический расчет вероятности отключения по формуле <strong
+                        class="text-slate-300">P = P<sub>b</sub> × K<sub>u</sub> × K<sub>t</sub></strong>, а затем
+                    предоставит экспертное заключение о физических последствиях инцидента.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-3">Остаточное напряжение
+                                (U<sub>ост</sub>), %</label>
+                            <input type="range" id="u-range" min="0" max="100" value="65"
+                                class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-500">
+                            <div class="flex justify-between text-xs mt-2 font-mono">
+                                <span>0%</span>
+                                <span id="u-val" class="text-sky-400 text-lg font-bold">65%</span>
+                                <span>100%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-3">Длительность провала
+                                (&Delta;t), мс</label>
+                            <input type="number" id="t-val" value="350"
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-5 py-3 focus:ring-2 focus:ring-sky-500 outline-none text-xl font-mono">
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-400 mb-2">Объект анализа</label>
+                            <select id="obj-type"
+                                class="w-full bg-slate-900 border border-slate-700 rounded-xl px-5 py-3 outline-none focus:ring-2 focus:ring-sky-500">
+                                <option value="Насосная станция (АД 6кВ)">Насосная станция (АД 6кВ)</option>
+                                <option value="Компрессорная установка (ЧРП)">Компрессорная установка (ЧРП)</option>
+                                <option value="Система управления (ПЛК)">Система управления (ПЛК)</option>
+                                <option value="Цех ЭЛОУ-АВТ (Комплекс)">Цех ЭЛОУ-АВТ (Комплекс)</option>
+                            </select>
+                        </div>
+                        <button id="run-calc"
+                            class="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-black py-4 rounded-xl transition-all shadow-xl shadow-sky-500/20 active:scale-[0.98]">
+                            ВЫПОЛНИТЬ РАСЧЕТ РИСКА
+                        </button>
+                    </div>
+                </div>
+
+                <!-- RESULT BLOCK -->
+                <div id="result-output" class="hidden space-y-8">
+
+                    <!-- 1. Mathematical calculation steps -->
+                    <div class="bg-slate-950/80 rounded-2xl p-8 border border-slate-700">
+                        <h3 class="text-sky-400 font-bold uppercase text-sm tracking-widest mb-6">1. Математический
+                            расчет вероятности сбоя</h3>
+                        <div id="calc-steps" class="space-y-3"></div>
+                        <div id="calc-result-box" class="mt-6 p-5 rounded-xl border-2 text-center">
+                            <div class="text-sm text-slate-400 uppercase tracking-widest mb-1">Итоговая вероятность сбоя
+                            </div>
+                            <div id="calc-result-value" class="text-5xl font-black"></div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Risk charts (generated from formula) -->
+                    <div class="bg-slate-950/80 rounded-2xl p-8 border border-slate-700">
+                        <h3 class="text-sky-400 font-bold uppercase text-sm tracking-widest mb-2">2. Пространство
+                            устойчивости</h3>
+                        <p class="text-xs text-slate-500 mb-6">Зависимости рассчитаны по формуле <span
+                                class="font-mono text-slate-400">P = P<sub>b</sub> × (dU/30) × (t/200)</span> для
+                            выбранного типа оборудования. Ваш режим отмечен маркером.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="text-center text-sm font-bold text-slate-300 mb-4">Влияние длительности
+                                    провала</h4>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="riskByTimeChart"></canvas>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-center text-sm font-bold text-slate-300 mb-4">Влияние глубины провала
+                                </h4>
+                                <div class="chart-container" style="height: 300px;">
+                                    <canvas id="riskByVoltageChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. AI Analysis text -->
+                    <div class="bg-slate-950/80 rounded-2xl p-8 border border-slate-700 relative">
+                        <h3 class="text-sky-400 font-bold uppercase text-sm tracking-widest mb-6">3. Экспертное
+                            заключение</h3>
+                        <div id="ai-loading" class="hidden flex items-center gap-3 mb-4">
+                            <div class="flex gap-2">
+                                <div class="w-3 h-3 bg-sky-500 rounded-full loading-pulse"></div>
+                                <div class="w-3 h-3 bg-sky-500 rounded-full loading-pulse"
+                                    style="animation-delay: 0.2s"></div>
+                                <div class="w-3 h-3 bg-sky-500 rounded-full loading-pulse"
+                                    style="animation-delay: 0.4s"></div>
+                            </div>
+                            <span class="text-slate-400 text-sm">Формирование экспертного заключения...</span>
+                        </div>
+                        <div id="ai-text" class="text-slate-300 leading-relaxed text-sm md:text-base space-y-4"></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: RECOMMENDATIONS -->
+        <section>
+            <div class="flex items-center gap-4 mb-12">
+                <div class="h-10 w-1 bg-amber-500"></div>
+                <h2 class="text-3xl font-bold">Комплексные рекомендации по ТПР</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="step-node p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">🌐</div>
+                    <div class="text-amber-500 text-xs font-bold mb-4 tracking-tighter uppercase">Уровень 1: Сетевой
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Опережающее деление сети</h3>
+                    <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+                        Применение автоматики деления на шинах 110/220 кВ при КЗ во внешних сетях. Позволяет изолировать
+                        "здоровую" часть СЭС до момента глубокого падения напряжения.
+                    </p>
+                    <div class="bg-slate-800/50 p-3 rounded-lg text-[10px] text-slate-500 uppercase font-mono">
+                        Обоснование: Статья EEPIR (Задкова)</div>
+                </div>
+
+                <div class="step-node p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">⚡</div>
+                    <div class="text-sky-500 text-xs font-bold mb-4 tracking-tighter uppercase">Уровень 2: Узловой</div>
+                    <h3 class="text-xl font-bold mb-4">Применение DVR и ИБП</h3>
+                    <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+                        Установка динамических компенсаторов искажения напряжения (DVR) на вводах ответственных
+                        потребителей 0.4-6 кВ. Время реакции менее 5 мс.
+                    </p>
+                    <div class="bg-slate-800/50 p-3 rounded-lg text-[10px] text-slate-500 uppercase font-mono">
+                        Эффективность: 98% защиты от провалов</div>
+                </div>
+
+                <div class="step-node p-8 rounded-3xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 text-6xl">⚙️</div>
+                    <div class="text-indigo-500 text-xs font-bold mb-4 tracking-tighter uppercase">Уровень 3: Агрегатный
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Настройка БАВР и БНН</h3>
+                    <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+                        Внедрение быстродействующего АВР (типа БАВР) и блокировки при неисправности цепей напряжения
+                        (БНН). Оптимизация уставок самозапуска двигателей.
+                    </p>
+                    <div class="bg-slate-800/50 p-3 rounded-lg text-[10px] text-slate-500 uppercase font-mono">ГОСТ:
+                        32144-2013 Пункт 4.2.2</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-950 border-t border-slate-800 py-12 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-slate-500 text-xs leading-loose max-w-md">
+                Инфографика подготовлена на основе материалов по повышению надежности СЭС НПЗ РФ. Ссылки: Вестник ИГЭУ
+                (2010), Исследования СамГТУ (Сызранский филиал), Стандарты ФСК ЕЭС.
+            </div>
+            <div class="flex gap-4">
+                <div class="text-right">
+                    <div class="text-slate-300 text-sm font-bold">2024 Экспертный Анализ</div>
+                    <div class="text-slate-500 text-[10px]">Кожевникова Е.С., Задкова Е.А. et al.</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const apiKey = "AIzaSyDnTf5MtCB5QhYrq552_p1AjV-7H2dOjHc"; // Заполняется средой платформы
+
+        // ── Chart defaults ──────────────────────────────────────────────
+        Chart.defaults.color = '#64748b';
+        Chart.defaults.font.family = 'Inter';
+
+        // ── Static incidents chart ───────────────────────────────────────
+        new Chart(document.getElementById('incidentsChart').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'],
+                datasets: [{
+                    label: 'Число провалов (среднее)',
+                    data: [12, 19, 15, 8, 14, 25, 32, 28, 15, 12, 18, 22],
+                    borderColor: '#38bdf8',
+                    backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#38bdf8'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, grid: { color: '#1e293b' }, title: { display: true, text: 'Кол-во инцидентов' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // ── Equipment profiles (empirical constants per load type) ────────
+        const loadProfiles = {
+            'Насосная станция (АД 6кВ)': {
+                uCrit: 30,  // Критический порог ЗМН/контактора (%)
+                tCrit: 200, // Критическое время (мс)
+                pb:    40   // Базовая вероятность сбоя (%)
+            },
+            'Компрессорная установка (ЧРП)': {
+                uCrit: 15,  // ЧРП чувствительны к падению (допуск 10-15%)
+                tCrit: 50,  // Быстро отключаются по защите звена постоянного тока
+                pb:    80
+            },
+            'Система управления (ПЛК)': {
+                uCrit: 40,  // Блоки питания ПЛК имеют запас ёмкости
+                tCrit: 20,  // При исчерпании ёмкости сбой мгновенный (1-2 периода)
+                pb:    90
+            },
+            'Цех ЭЛОУ-АВТ (Комплекс)': {
+                uCrit: 30,
+                tCrit: 150,
+                pb:    60   // Комплексная оценка смешанной нагрузки
+            }
+        };
+
+        // ── Pure math calculation ────────────────────────────────────────
+        function calculateRisk(u, t, obj) {
+            const u_num  = parseFloat(u);
+            const t_num  = parseFloat(t);
+            const profile = loadProfiles[obj] || loadProfiles['Насосная станция (АД 6кВ)'];
+            const { uCrit, tCrit, pb: Pb } = profile;
+
+            const dU = 100 - u_num;
+            if (dU <= 0) return { u: u_num, t: t_num, dU: 0, Ku: 0, Kt: 0, Pb, uCrit, tCrit, P: 0 };
+
+            const Ku = dU / uCrit;
+            const Kt = t_num / tCrit;
+            const P  = Math.max(0, Math.min(100, Pb * Ku * Kt));
+
+            return { u: u_num, t: t_num, dU, Ku, Kt, Pb, uCrit, tCrit, P };
+        }
+
+        // ── Render calculation steps ─────────────────────────────────────
+        function renderCalcSteps(r, obj) {
+            const stepsDiv = document.getElementById('calc-steps');
+            const resultBox = document.getElementById('calc-result-box');
+            const resultVal = document.getElementById('calc-result-value');
+
+            stepsDiv.innerHTML = `
+                <div class="calc-step"><span class="step-num">1.</span> dU = 100% − U<sub>ост</sub> = 100% − ${r.u}% = <span class="step-result">${r.dU.toFixed(1)}%</span> &nbsp;<span class="text-slate-600 text-xs">(глубина провала)</span></div>
+                <div class="calc-step"><span class="step-num">2.</span> K<sub>u</sub> = dU / U<sub>крит</sub> = ${r.dU.toFixed(1)} / ${r.uCrit} = <span class="step-result">${r.Ku.toFixed(2)}</span> &nbsp;<span class="text-slate-600 text-xs">(U<sub>крит</sub> = ${r.uCrit}% — критический порог для данного оборудования)</span></div>
+                <div class="calc-step"><span class="step-num">3.</span> K<sub>t</sub> = Δt / t<sub>крит</sub> = ${r.t} / ${r.tCrit} = <span class="step-result">${r.Kt.toFixed(2)}</span> &nbsp;<span class="text-slate-600 text-xs">(t<sub>крит</sub> = ${r.tCrit} мс — критическое время для данного оборудования)</span></div>
+                <div class="calc-step"><span class="step-num">4.</span> P<sub>b</sub> = <span class="step-result">${r.Pb}%</span> &nbsp;<span class="text-slate-600 text-xs">(базовая вероятность сбоя для: ${obj})</span></div>
+                <div class="calc-step font-bold border-sky-800"><span class="step-num">5.</span> P = P<sub>b</sub> × K<sub>u</sub> × K<sub>t</sub> = ${r.Pb} × ${r.Ku.toFixed(2)} × ${r.Kt.toFixed(2)} = <span class="step-result text-sky-300">${r.P.toFixed(1)}%</span>${r.P >= 99.9 ? ' <span class="text-xs text-slate-500">(ограничено 100%)</span>' : ''}</div>
+            `;
+
+            // Color the result box by risk level
+            let color, label;
+            if (r.P >= 75) {
+                color = 'border-rose-500 bg-rose-950/30';
+                resultVal.className = 'text-5xl font-black text-rose-400';
+                label = 'Критический риск';
+            } else if (r.P >= 40) {
+                color = 'border-amber-500 bg-amber-950/30';
+                resultVal.className = 'text-5xl font-black text-amber-400';
+                label = 'Высокий риск';
+            } else {
+                color = 'border-emerald-500 bg-emerald-950/30';
+                resultVal.className = 'text-5xl font-black text-emerald-400';
+                label = 'Умеренный риск';
+            }
+
+            resultBox.className = `mt-6 p-5 rounded-xl border-2 text-center ${color}`;
+            resultVal.textContent = r.P.toFixed(1) + '%';
+            resultBox.querySelector('.text-sm').textContent = label;
+        }
+
+        // ── Render result charts (formula-based, user point marked) ──────
+        let chartTime = null;
+        let chartVolt = null;
+
+        function renderResultCharts(r) {
+            if (chartTime) { chartTime.destroy(); chartTime = null; }
+            if (chartVolt) { chartVolt.destroy(); chartVolt = null; }
+
+            const Pb = r.Pb;
+
+            // ─ Chart 1: P vs time (ms) ─
+            const timePoints = Array.from({ length: 21 }, (_, i) => i * 25); // 0..500 ms
+
+            const curvesTime = [
+                { label: 'U = 40%', dU: 60, color: '#f43f5e' },
+                { label: 'U = 65%', dU: 35, color: '#f59e0b' },
+                { label: 'U = 80%', dU: 20, color: '#38bdf8' },
+            ];
+
+            // User's own curve (only add if their U is not already covered)
+            const userDU = r.dU;
+            const userCurveTime = timePoints.map(ti => Math.min(100, Pb * (userDU / r.uCrit) * (ti / r.tCrit)));
+            const userPointTime = { x: r.t, y: parseFloat(r.P.toFixed(1)) };
+
+            const datasetsTime = curvesTime.map(c => ({
+                label: c.label,
+                data: timePoints.map(ti => Math.min(100, Pb * (c.dU / r.uCrit) * (ti / r.tCrit))),
+                borderColor: c.color,
+                borderWidth: 1.5,
+                tension: 0.3,
+                pointRadius: 0,
+                fill: false
+            }));
+
+            // User's own curve highlighted
+            datasetsTime.push({
+                label: `U = ${r.u}% (ваш режим)`,
+                data: userCurveTime,
+                borderColor: '#a855f7',
+                borderWidth: 3,
+                tension: 0.3,
+                pointRadius: 0,
+                fill: false
+            });
+
+            // Scatter point for current operating condition
+            datasetsTime.push({
+                type: 'scatter',
+                label: `Режим: t=${r.t}мс`,
+                data: [userPointTime],
+                backgroundColor: '#a855f7',
+                borderColor: '#ffffff',
+                borderWidth: 2,
+                pointRadius: 8,
+                pointHoverRadius: 10
+            });
+
+            chartTime = new Chart(document.getElementById('riskByTimeChart').getContext('2d'), {
+                type: 'line',
+                data: { labels: timePoints, datasets: datasetsTime },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { boxWidth: 12, font: { size: 10 } } },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        y: { min: 0, max: 100, title: { display: true, text: 'Вероятность сбоя (%)' }, grid: { color: '#1e293b' } },
+                        x: { title: { display: true, text: 'Длительность провала (мс)' }, grid: { color: '#1e293b' } }
+                    }
+                }
+            });
+
+            // ─ Chart 2: P vs voltage (%) ─
+            const voltPoints = Array.from({ length: 21 }, (_, i) => i * 5); // 0..100%
+
+            // Reference time curves scaled to equipment's tCrit (0.5×, 1×, 2×)
+            const curvesVolt = [
+                { label: `t = ${Math.round(r.tCrit * 0.5)} мс (0.5×t<sub>крит</sub>)`, t: r.tCrit * 0.5, color: '#38bdf8' },
+                { label: `t = ${r.tCrit} мс (1×t<sub>крит</sub>)`,                       t: r.tCrit,       color: '#f59e0b' },
+                { label: `t = ${Math.round(r.tCrit * 2)} мс (2×t<sub>крит</sub>)`,       t: r.tCrit * 2,   color: '#f43f5e' },
+            ];
+
+            const userCurveVolt = voltPoints.map(v => Math.min(100, Pb * ((100 - v) / r.uCrit) * (r.t / r.tCrit)));
+            const userPointVolt = { x: r.u, y: parseFloat(r.P.toFixed(1)) };
+
+            const datasetsVolt = curvesVolt.map(c => ({
+                label: c.label,
+                data: voltPoints.map(v => Math.min(100, Pb * ((100 - v) / r.uCrit) * (c.t / r.tCrit))),
+                borderColor: c.color,
+                borderWidth: 1.5,
+                tension: 0.3,
+                pointRadius: 0,
+                fill: false
+            }));
+
+            datasetsVolt.push({
+                label: `t = ${r.t} мс (ваш режим)`,
+                data: userCurveVolt,
+                borderColor: '#a855f7',
+                borderWidth: 3,
+                tension: 0.3,
+                pointRadius: 0,
+                fill: false
+            });
+
+            datasetsVolt.push({
+                type: 'scatter',
+                label: `Режим: U=${r.u}%`,
+                data: [userPointVolt],
+                backgroundColor: '#a855f7',
+                borderColor: '#ffffff',
+                borderWidth: 2,
+                pointRadius: 8,
+                pointHoverRadius: 10
+            });
+
+            chartVolt = new Chart(document.getElementById('riskByVoltageChart').getContext('2d'), {
+                type: 'line',
+                data: { labels: voltPoints, datasets: datasetsVolt },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { boxWidth: 12, font: { size: 10 } } },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        y: { min: 0, max: 100, title: { display: true, text: 'Вероятность сбоя (%)' }, grid: { color: '#1e293b' } },
+                        x: { title: { display: true, text: 'Остаточное напряжение (%)' }, grid: { color: '#1e293b' }, reverse: true }
+                    }
+                }
+            });
+        }
+
+        // ── Fetch AI analysis (text only, math is pre-calculated) ────────
+        async function fetchAIAnalysis(r, obj) {
+            const aiLoading = document.getElementById('ai-loading');
+            const aiText = document.getElementById('ai-text');
+
+            aiLoading.classList.remove('hidden');
+            aiText.innerHTML = '';
+
+            const systemPrompt = `Ты — ведущий эксперт по надежности электроснабжения НПЗ России.
+Математический расчет уже выполнен системой. Твоя задача — предоставить только качественный технический анализ последствий и рекомендации.
+Не повторяй математику. Используй простые символы, без LaTeX.`;
+
+            const userPrompt = `Для объекта "${obj}" выполнен расчет риска провала напряжения.
+Результаты расчета:
+- Остаточное напряжение: U = ${r.u}%
+- Длительность провала: Δt = ${r.t} мс
+- Глубина провала: dU = ${r.dU.toFixed(1)}%
+- Коэффициент по напряжению: Ku = ${r.Ku.toFixed(2)}
+- Коэффициент по времени: Kt = ${r.Kt.toFixed(2)}
+- Базовая вероятность: Pb = ${r.Pb}%
+- ИТОГОВАЯ ВЕРОЯТНОСТЬ СБОЯ: P = ${r.P.toFixed(1)}%
+
+Предоставь ответ строго в двух разделах:
+
+### Физические последствия
+(Подробно опиши: что происходит с двигателями, контакторами, защитами, самозапуском — исходя из P = ${r.P.toFixed(1)}%. Раздели умеренные, высокие и критические последствия.)
+
+### Рекомендации
+(3 конкретных технических шага по защите данного узла с указанием типа оборудования или стандарта.)`;
+
+            const fetchAI = async () => {
+                const response = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: userPrompt }] }],
+                            systemInstruction: { parts: [{ text: systemPrompt }] }
+                        })
+                    }
+                );
+                if (!response.ok) throw new Error('API Error ' + response.status);
+                return response.json();
+            };
+
+            try {
+                let data, delay = 1000;
+                for (let i = 0; i < 3; i++) {
+                    try {
+                        data = await fetchAI();
+                        break;
+                    } catch (e) {
+                        if (i === 2) throw e;
+                        await new Promise(r => setTimeout(r, delay));
+                        delay *= 2;
+                    }
+                }
+
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Ошибка получения данных.';
+
+                aiText.innerHTML = text
+                    .replace(/\n/g, '<br>')
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-sky-400">$1</strong>')
+                    .replace(/### (.*?)(<br>|$)/g, '<div class="mt-6 mb-3"><span class="bg-slate-800 text-sky-400 font-bold px-3 py-1 rounded border border-slate-700 uppercase tracking-wide text-xs">$1</span></div>')
+                    .replace(/^- (.*?)(<br>|$)/gm, '<div class="flex gap-2 mb-2 ml-2"><span class="text-sky-500 font-bold">→</span><span class="text-slate-300">$1</span></div>');
+
+            } catch (err) {
+                aiText.innerHTML = "<span class='text-rose-500 font-bold'>Ошибка связи с нейросетью. Пожалуйста, повторите попытку.</span>";
+            } finally {
+                aiLoading.classList.add('hidden');
+            }
+        }
+
+        // ── UI wiring ────────────────────────────────────────────────────
+        const uInput = document.getElementById('u-range');
+        const uVal = document.getElementById('u-val');
+        uInput.oninput = () => { uVal.innerText = uInput.value + '%'; };
+
+        document.getElementById('run-calc').onclick = async () => {
+            const u = uInput.value;
+            const t = document.getElementById('t-val').value;
+            const obj = document.getElementById('obj-type').value;
+            const btn = document.getElementById('run-calc');
+
+            btn.disabled = true;
+            btn.textContent = 'РАСЧЕТ...';
+
+            // 1. Pure math — instant
+            const r = calculateRisk(u, t, obj);
+
+            // 2. Show result block
+            document.getElementById('result-output').classList.remove('hidden');
+
+            // 3. Render calc steps (instant)
+            renderCalcSteps(r, obj);
+
+            // 4. Render charts from formula (instant)
+            renderResultCharts(r);
+
+            // 5. Fetch AI analysis (async, shows loading spinner only in that block)
+            await fetchAIAnalysis(r, obj);
+
+            btn.disabled = false;
+            btn.textContent = 'ВЫПОЛНИТЬ РАСЧЕТ РИСКА';
+        };
+    </script>
+</body>
+
+</html>
